@@ -5,10 +5,10 @@ import { useRef } from 'react';
 
 interface SearchProps {
   query: string;
-  setQuery: (query: string) => void;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
-const Search = ({ query, setQuery }: SearchProps) => {
+const Search = ({ query, onChange }: SearchProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const focusInput = () => {
@@ -19,8 +19,18 @@ const Search = ({ query, setQuery }: SearchProps) => {
   
   return (
     <div className={styles['wrapper']}>
-      <FontAwesomeIcon icon={faMagnifyingGlass} className={styles['search--icon']} onClick={focusInput} />
-      <input ref={inputRef} placeholder='Search' value={query} onChange={(e) => setQuery(e.target.value)} className={styles['input']} />
+      <FontAwesomeIcon
+        icon={faMagnifyingGlass}
+        className={styles['search--icon']}
+        onClick={focusInput}
+      />
+      <input
+        ref={inputRef}
+        placeholder='Search'
+        value={query}
+        onChange={onChange}
+        className={styles['input']}
+      />
     </div>
   )
 }
