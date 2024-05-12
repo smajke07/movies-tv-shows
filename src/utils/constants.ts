@@ -13,6 +13,6 @@ export const TABS_OPTIONS: TabInterface[] = [
     { id: 'tv', label: 'TV Shows' }
 ];
 
-export const DEFAULT_SELECTED_TAB: DataType = 'movie';
+export const DEFAULT_SELECTED_TAB: DataType = 'tv';
 
 export const NUMBER_OF_TOP_RATED = 10;
