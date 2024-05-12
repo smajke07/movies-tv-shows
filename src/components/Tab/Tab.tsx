@@ -1,4 +1,4 @@
-import styles from './Tab.module.css';
+import styles from "./Tab.module.css";
 
 interface TabProps {
   label: string;
@@ -9,12 +9,12 @@ interface TabProps {
 
 const Tab = ({ label, active, withLeftBorder, onClick }: TabProps) => {
   return (
-    <div
+    <button
       className={`${styles['wrapper']} ${active && styles['active']} ${withLeftBorder && styles['with--left--border']}`}
       onClick={onClick}
     >
       <span className={styles['label']}>{label}</span>
-    </div>
+    </button>
   )
 }
 

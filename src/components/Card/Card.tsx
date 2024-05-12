@@ -1,4 +1,5 @@
-import styles from './Card.module.css';
+import styles from "./Card.module.css";
+import placeholderImage from "./../../assets/images/placeholder-image.webp";
 
 interface CardProps {
   imageSrc?: string;
@@ -9,8 +10,7 @@ interface CardProps {
 const Card = ({ imageSrc, imageAlt, title }: CardProps) => {
   return (
     <article className={styles['wrapper']}>
-      {/* TODO: Add backup placeholder img if imageSrc is falsy */}
-      <img src={imageSrc} alt={imageAlt || title} className={styles['image']} />
+      <img src={imageSrc || placeholderImage} alt={imageAlt || title} className={styles['image']} />
       <h2 className={styles['title']}>{title}</h2>
     </article>
   )

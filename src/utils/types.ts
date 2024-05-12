@@ -22,6 +22,10 @@ export interface MovieInterface {
     vote_count: number;
 }
 
+export interface MovieInterfaceExtended extends MovieInterface {
+    imageURL: string;
+}
+
 export interface TVShowInterface {
     adult: false,
     backdrop_path: string;
@@ -39,6 +43,10 @@ export interface TVShowInterface {
     vote_count: number;
 }
 
+export interface TVShowInterfaceExtended extends TVShowInterface {
+    imageURL: string;
+}
+
 interface Response {
     page: number;
     total_pages: number;
@@ -54,6 +62,6 @@ export interface TVShowsResponse extends Response {
 }
 
 export interface DataInterface {
-    movies: MovieInterface[];
-    tvShows: TVShowInterface[];
+    movies: MovieInterfaceExtended[];
+    tvShows: TVShowInterfaceExtended[];
 }

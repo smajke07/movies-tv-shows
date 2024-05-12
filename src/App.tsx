@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
-import './App.css';
-import { DataInterface, DataType } from './utils/types';
-import { Tabs } from './components/Tabs';
-import { isMoviesTabSelected } from './utils/helpers';
-import getTopRatedMovies from './getters/getTopRatedMovies';
-import getTopRatedTVShows from './getters/getTopRatedTVShows';
-import { DEFAULT_SELECTED_TAB } from './utils/constants';
-import { List } from './components/List';
-import { Search } from './components/Search';
-import { useDebounce } from './utils/hooks';
-import getMoviesByQuery from './getters/getMoviesByQuery';
-import getTVShowsByQuery from './getters/getTVShowsByQuery';
+import { useEffect, useState } from "react";
+import "./App.css";
+import { DataInterface, DataType, MovieInterfaceExtended, TVShowInterfaceExtended } from "./utils/types";
+import { Tabs } from "./components/Tabs";
+import { isMoviesTabSelected } from "./utils/helpers";
+import getTopRatedMovies from "./getters/getTopRatedMovies";
+import getTopRatedTVShows from "./getters/getTopRatedTVShows";
+import { DEFAULT_SELECTED_TAB } from "./utils/constants";
+import { List } from "./components/List";
+import { Search } from "./components/Search";
+import { useDebounce } from "./utils/hooks";
+import getMoviesByQuery from "./getters/getMoviesByQuery";
+import getTVShowsByQuery from "./getters/getTVShowsByQuery";
 
 function App() {
   const [selectedTab, setSelectedTab] = useState<DataType>(DEFAULT_SELECTED_TAB);
@@ -29,19 +29,31 @@ function App() {
           const topRatedMovies = await getTopRatedMovies();
 
           // Format movies if necessary
+          const topRatedMoviesFormatted: MovieInterfaceExtended[] = topRatedMovies.map(movie => (
+            {
+              ...movie, 
+              imageURL: movie.backdrop_path ? `https://image.tmdb.org/t/p/w500_and_h282_face${movie.backdrop_path}` : ``
+            }
+          ));
 
           setData({
             tvShows: [],
-            movies: topRatedMovies
+            movies: topRatedMoviesFormatted
           });
         } else {
-          const topRatedShows = await getTopRatedTVShows();
+          const topRatedTVShows = await getTopRatedTVShows();
 
           // Format TV shows if necessary
+          const topRatedTVShowsFormatted: TVShowInterfaceExtended[] = topRatedTVShows.map(tvShow => (
+            {
+              ...tvShow, 
+              imageURL: tvShow.backdrop_path ? `https://image.tmdb.org/t/p/w500_and_h282_face${tvShow.backdrop_path}` : ``
+            }
+          ));
 
           setData({
             movies: [],
-            tvShows: topRatedShows
+            tvShows: topRatedTVShowsFormatted
           });
         }
 
@@ -57,19 +69,31 @@ function App() {
           const movies = await getMoviesByQuery(query);
 
           // Format movies if necessary
+          const moviesFormatted: MovieInterfaceExtended[] = movies.map(movie => (
+            {
+              ...movie, 
+              imageURL: movie.backdrop_path ? `https://image.tmdb.org/t/p/w500_and_h282_face${movie.backdrop_path}` : ``
+            }
+          ));
 
           setData({
             tvShows: [],
-            movies: movies
+            movies: moviesFormatted
           });
         } else {
-          const shows = await getTVShowsByQuery(query);
+          const tvShows = await getTVShowsByQuery(query);
 
           // Format TV shows if necessary
+          const tvShowsFormatted: TVShowInterfaceExtended[] = tvShows.map(tvShow => (
+            {
+              ...tvShow, 
+              imageURL: tvShow.backdrop_path ? `https://image.tmdb.org/t/p/w500_and_h282_face${tvShow.backdrop_path}` : ``
+            }
+          ));
 
           setData({
             movies: [],
-            tvShows: shows
+            tvShows: tvShowsFormatted
           });
         }
 
@@ -77,7 +101,6 @@ function App() {
       }
 
       getFormatAndSetByQuery();
-        
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTab, debounceValue]);
