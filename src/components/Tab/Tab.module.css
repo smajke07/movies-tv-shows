@@ -1,0 +1,21 @@
+.wrapper {
+    background-color: white;
+    padding: 4px 12px;
+    cursor: pointer;
+}
+
+.wrapper:hover {
+    background-color: skyblue;
+}
+
+.active {
+    background-color: steelblue !important;
+}
+
+.label {
+    background-color: transparent;
+}
+
+.with--left--border {
+    border-left: solid 1px black;
+}
