@@ -5,7 +5,7 @@ import { useRef } from "react";
 
 interface SearchProps {
   query: string;
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
 const Search = ({ query, onChange }: SearchProps) => {

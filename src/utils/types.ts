@@ -65,3 +65,11 @@ export interface DataInterface {
     movies: MovieInterfaceExtended[];
     tvShows: TVShowInterfaceExtended[];
 }
+
+export interface DetailsInterface {
+    type: DataType;
+    imageURL?: string;
+    imageAlt?: string;
+    title: string;
+    overview: string;
+}

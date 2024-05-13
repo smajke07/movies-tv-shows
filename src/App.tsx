@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
 import "./App.css";
-import { DataInterface, DataType, MovieInterfaceExtended, TVShowInterfaceExtended } from "./utils/types";
+import { useEffect, useState } from "react";
+import { DataInterface, DataType, DetailsInterface, MovieInterfaceExtended, TVShowInterfaceExtended } from "./utils/types";
 import { Tabs } from "./components/Tabs";
-import { isMoviesTabSelected } from "./utils/helpers";
+import { formatMovies, formatTVShows, isMoviesTabSelected } from "./utils/helpers";
 import getTopRatedMovies from "./getters/getTopRatedMovies";
 import getTopRatedTVShows from "./getters/getTopRatedTVShows";
 import { DEFAULT_SELECTED_TAB } from "./utils/constants";
@@ -11,11 +11,13 @@ import { Search } from "./components/Search";
 import { useDebounce } from "./utils/hooks";
 import getMoviesByQuery from "./getters/getMoviesByQuery";
 import getTVShowsByQuery from "./getters/getTVShowsByQuery";
+import { Details } from "./components/Details";
 
 function App() {
   const [selectedTab, setSelectedTab] = useState<DataType>(DEFAULT_SELECTED_TAB);
   const [query, setQuery] = useState<string>('');
   const [data, setData] = useState<DataInterface>({ movies: [], tvShows: [] });
+  const [detailsData, setDetailsData] = useState<DetailsInterface | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const debounceValue = useDebounce(query, 1000);
@@ -27,30 +29,14 @@ function App() {
 
         if (isMoviesTabSelected(selectedTab)){
           const topRatedMovies = await getTopRatedMovies();
-
-          // Format movies if necessary
-          const topRatedMoviesFormatted: MovieInterfaceExtended[] = topRatedMovies.map(movie => (
-            {
-              ...movie, 
-              imageURL: movie.backdrop_path ? `https://image.tmdb.org/t/p/w500_and_h282_face${movie.backdrop_path}` : ``
-            }
-          ));
-
+          const topRatedMoviesFormatted: MovieInterfaceExtended[] = formatMovies(topRatedMovies);
           setData({
             tvShows: [],
             movies: topRatedMoviesFormatted
           });
         } else {
           const topRatedTVShows = await getTopRatedTVShows();
-
-          // Format TV shows if necessary
-          const topRatedTVShowsFormatted: TVShowInterfaceExtended[] = topRatedTVShows.map(tvShow => (
-            {
-              ...tvShow, 
-              imageURL: tvShow.backdrop_path ? `https://image.tmdb.org/t/p/w500_and_h282_face${tvShow.backdrop_path}` : ``
-            }
-          ));
-
+          const topRatedTVShowsFormatted: TVShowInterfaceExtended[] = formatTVShows(topRatedTVShows);
           setData({
             movies: [],
             tvShows: topRatedTVShowsFormatted
@@ -67,30 +53,14 @@ function App() {
 
         if (isMoviesTabSelected(selectedTab)){
           const movies = await getMoviesByQuery(query);
-
-          // Format movies if necessary
-          const moviesFormatted: MovieInterfaceExtended[] = movies.map(movie => (
-            {
-              ...movie, 
-              imageURL: movie.backdrop_path ? `https://image.tmdb.org/t/p/w500_and_h282_face${movie.backdrop_path}` : ``
-            }
-          ));
-
+          const moviesFormatted: MovieInterfaceExtended[] = formatMovies(movies);
           setData({
             tvShows: [],
             movies: moviesFormatted
           });
         } else {
           const tvShows = await getTVShowsByQuery(query);
-
-          // Format TV shows if necessary
-          const tvShowsFormatted: TVShowInterfaceExtended[] = tvShows.map(tvShow => (
-            {
-              ...tvShow, 
-              imageURL: tvShow.backdrop_path ? `https://image.tmdb.org/t/p/w500_and_h282_face${tvShow.backdrop_path}` : ``
-            }
-          ));
-
+          const tvShowsFormatted: TVShowInterfaceExtended[] = formatTVShows(tvShows);
           setData({
             movies: [],
             tvShows: tvShowsFormatted
@@ -107,13 +77,26 @@ function App() {
   
   return (
     <>
-      <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-      <Search query={query} onChange={(e) => setQuery(e.target.value)} />
-      {isLoading ? (
-        <p>Loading data...</p>
-      ) : (
-        <List selectedTab={selectedTab} data={data} />
-      )}
+    {!detailsData ? (
+      <>
+        <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+        <Search query={query} onChange={(e) => setQuery(e.target.value)} />
+        {isLoading ? (
+          <p>Loading {isMoviesTabSelected(selectedTab) ? 'movies' : 'TV shows'}...</p>
+        ) : (
+          <List
+            selectedTab={selectedTab}
+            data={data}
+            setDetailsData={setDetailsData}
+          />
+        )}
+      </>
+    ) : (
+      <Details
+        {...detailsData}
+        resetDetailsData={() => setDetailsData(undefined)}
+      />
+    )}
     </>
   );
 }

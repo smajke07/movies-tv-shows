@@ -4,7 +4,7 @@ interface TabProps {
   label: string;
   active: boolean;
   withLeftBorder: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const Tab = ({ label, active, withLeftBorder, onClick }: TabProps) => {

@@ -6,17 +6,19 @@
 }
 
 .wrapper:hover {
-    background-color: skyblue;
+    background-color: dodgerblue;
 }
 
 .active {
-    background-color: steelblue !important;
-}
-
-.label {
-    background-color: transparent;
+    background-color: royalblue !important;
 }
 
 .with--left--border {
     border-left: solid 1px black;
+}
+
+.label {
+    background-color: transparent;
+    font-size: 16px;
+    font-weight: 500;
 }
