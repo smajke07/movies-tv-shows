@@ -17,3 +17,5 @@ export const TABS_OPTIONS: TabInterface[] = [
 export const DEFAULT_SELECTED_TAB: DataType = 'tv';
 
 export const NUMBER_OF_TOP_RATED = 10;
+
+export const ROOT_IMAGE_URL = 'https://image.tmdb.org/t/p/w500_and_h282_face';

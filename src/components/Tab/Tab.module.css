@@ -6,7 +6,7 @@
 }
 
 .wrapper:hover {
-    background-color: dodgerblue;
+    background-color: rgba(65, 105, 225, 0.75);
 }
 
 .active {
