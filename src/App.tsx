@@ -1,21 +1,23 @@
-import { useEffect, useState } from 'react';
-import './App.css';
-import { DataInterface, DataType } from './utils/types';
-import { Tabs } from './components/Tabs';
-import { isMoviesTabSelected } from './utils/helpers';
-import getTopRatedMovies from './getters/getTopRatedMovies';
-import getTopRatedTVShows from './getters/getTopRatedTVShows';
-import { DEFAULT_SELECTED_TAB } from './utils/constants';
-import { List } from './components/List';
-import { Search } from './components/Search';
-import { useDebounce } from './utils/hooks';
-import getMoviesByQuery from './getters/getMoviesByQuery';
-import getTVShowsByQuery from './getters/getTVShowsByQuery';
+import "./App.css";
+import { useEffect, useState } from "react";
+import { DataInterface, DataType, DetailsInterface, MovieInterfaceExtended, TVShowInterfaceExtended } from "./utils/types";
+import { Tabs } from "./components/Tabs";
+import { formatMovies, formatTVShows, isMoviesTabSelected } from "./utils/helpers";
+import getTopRatedMovies from "./getters/getTopRatedMovies";
+import getTopRatedTVShows from "./getters/getTopRatedTVShows";
+import { DEFAULT_SELECTED_TAB } from "./utils/constants";
+import { List } from "./components/List";
+import { Search } from "./components/Search";
+import { useDebounce } from "./utils/hooks";
+import getMoviesByQuery from "./getters/getMoviesByQuery";
+import getTVShowsByQuery from "./getters/getTVShowsByQuery";
+import { Details } from "./components/Details";
 
 function App() {
   const [selectedTab, setSelectedTab] = useState<DataType>(DEFAULT_SELECTED_TAB);
   const [query, setQuery] = useState<string>('');
   const [data, setData] = useState<DataInterface>({ movies: [], tvShows: [] });
+  const [detailsData, setDetailsData] = useState<DetailsInterface | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const debounceValue = useDebounce(query, 1000);
@@ -27,21 +29,17 @@ function App() {
 
         if (isMoviesTabSelected(selectedTab)){
           const topRatedMovies = await getTopRatedMovies();
-
-          // Format movies if necessary
-
+          const topRatedMoviesFormatted: MovieInterfaceExtended[] = formatMovies(topRatedMovies);
           setData({
             tvShows: [],
-            movies: topRatedMovies
+            movies: topRatedMoviesFormatted
           });
         } else {
-          const topRatedShows = await getTopRatedTVShows();
-
-          // Format TV shows if necessary
-
+          const topRatedTVShows = await getTopRatedTVShows();
+          const topRatedTVShowsFormatted: TVShowInterfaceExtended[] = formatTVShows(topRatedTVShows);
           setData({
             movies: [],
-            tvShows: topRatedShows
+            tvShows: topRatedTVShowsFormatted
           });
         }
 
@@ -55,21 +53,17 @@ function App() {
 
         if (isMoviesTabSelected(selectedTab)){
           const movies = await getMoviesByQuery(query);
-
-          // Format movies if necessary
-
+          const moviesFormatted: MovieInterfaceExtended[] = formatMovies(movies);
           setData({
             tvShows: [],
-            movies: movies
+            movies: moviesFormatted
           });
         } else {
-          const shows = await getTVShowsByQuery(query);
-
-          // Format TV shows if necessary
-
+          const tvShows = await getTVShowsByQuery(query);
+          const tvShowsFormatted: TVShowInterfaceExtended[] = formatTVShows(tvShows);
           setData({
             movies: [],
-            tvShows: shows
+            tvShows: tvShowsFormatted
           });
         }
 
@@ -77,20 +71,32 @@ function App() {
       }
 
       getFormatAndSetByQuery();
-        
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTab, debounceValue]);
   
   return (
     <>
-      <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
-      <Search query={query} onChange={(e) => setQuery(e.target.value)} />
-      {isLoading ? (
-        <p>Loading data...</p>
-      ) : (
-        <List selectedTab={selectedTab} data={data} />
-      )}
+    {!detailsData ? (
+      <>
+        <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} />
+        <Search query={query} onChange={(e) => setQuery(e.target.value)} />
+        {isLoading ? (
+          <p>Loading {isMoviesTabSelected(selectedTab) ? 'movies' : 'TV shows'}...</p>
+        ) : (
+          <List
+            selectedTab={selectedTab}
+            data={data}
+            setDetailsData={setDetailsData}
+          />
+        )}
+      </>
+    ) : (
+      <Details
+        {...detailsData}
+        resetDetailsData={() => setDetailsData(undefined)}
+      />
+    )}
     </>
   );
 }

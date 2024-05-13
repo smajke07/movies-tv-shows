@@ -1,18 +1,15 @@
+import axios from "axios";
 import { FETCH_OPTIONS, NUMBER_OF_TOP_RATED } from "../utils/constants";
 import { TVShowInterface, TVShowsResponse } from "../utils/types";
 
 const getTVShowsByQuery = async (query: string) : Promise<TVShowInterface[]> => {
     try {
-        const response = await fetch(
-            `https://api.themoviedb.org/3/search/tv?language=en-US&page=1&query=${query}`,
+        const response = await axios.get( // I checked the search isn't caps lock sensitive
+            `https://api.themoviedb.org/3/search/tv?language=en-US&page=1&query=${query.trim().toLowerCase()}`,
             FETCH_OPTIONS
         );
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok when getting TV shows by query words');
-        }
-
-        const data: TVShowsResponse = await response.json();
+        const data: TVShowsResponse = response.data;
 
         if (data && data.results && Array.isArray(data.results)) {
             return data.results.splice(0, NUMBER_OF_TOP_RATED);

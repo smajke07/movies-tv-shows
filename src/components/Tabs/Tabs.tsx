@@ -1,7 +1,7 @@
-import styles from './Tabs.module.css';
-import { TABS_OPTIONS } from '../../utils/constants';
-import { Tab } from '../Tab';
-import { DataType } from '../../utils/types';
+import styles from "./Tabs.module.css";
+import { TABS_OPTIONS } from "../../utils/constants";
+import { Tab } from "../Tab";
+import { DataType } from "../../utils/types";
 
 interface TabsProps {
   selectedTab: DataType;

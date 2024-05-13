@@ -1,11 +1,30 @@
 .wrapper {
     border: solid 1px black;
-    border-radius: 6px;
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     background: white;
+    overflow: hidden;
+}
+
+.wrapper:hover {
+    cursor: pointer;
+    opacity: 75%;
+}
+
+.image {
+    width: 100%;
+    border-bottom: solid 1px black;
 }
 
 .title {
-    border-top: solid 1px black;
     text-align: center;
+    font-size: 32px;
+    font-weight: 500;
+    padding: 12px 8px;
+}
+
+@media (max-width: 592px) {
+    .title {
+        font-size: 24px;
+        padding: 8px 6px;
+    }
 }

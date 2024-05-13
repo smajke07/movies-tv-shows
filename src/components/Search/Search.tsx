@@ -1,7 +1,7 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/pro-light-svg-icons';
-import styles from './Search.module.css';
-import { useRef } from 'react';
+import styles from "./Search.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/pro-light-svg-icons";
+import { useRef } from "react";
 
 interface SearchProps {
   query: string;
@@ -24,6 +24,7 @@ const Search = ({ query, onChange }: SearchProps) => {
         className={styles['search--icon']}
         onClick={focusInput}
       />
+
       <input
         ref={inputRef}
         placeholder='Search'
