@@ -19,13 +19,13 @@
     border-radius: 16px;
     border: solid 1px black;
     outline: 0;
-    outline-color: royalblue;
+    outline-color: black;
     outline-style: none;
     font-size: 16px;
 }
 
 .input:active {
-    outline: solid 1px royalblue;
+    outline: solid 1px black;
 }
 
 

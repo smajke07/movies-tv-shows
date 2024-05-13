@@ -26,7 +26,7 @@ const Details = ({ type, imageURL, imageAlt, title, overview, resetDetailsData }
         <h1 className={styles['title']}>{title}</h1>
         <div className={styles['overview']}>
           <span>{type === 'movie' ? 'Movie' : 'TV Show'} overview:</span>
-          <p>{overview}</p>
+          <p>- {overview || 'None provided'}</p>
         </div>    
       </div>
     </section>
